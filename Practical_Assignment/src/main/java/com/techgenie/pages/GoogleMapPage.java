@@ -1,23 +1,37 @@
 package com.techgenie.pages;
 
 import java.awt.RenderingHints.Key;
+import java.time.Duration;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 
 public class GoogleMapPage {
 	WebDriver driver;
-	
+	 Wait<WebDriver> wait;
 	public GoogleMapPage(WebDriver driver) {
 		this.driver = driver;
+		wait = new FluentWait<WebDriver>(driver)
+		        .withTimeout(Duration.ofSeconds(30))
+		        .pollingEvery(Duration.ofSeconds(5))
+		        .ignoring(NoSuchElementException.class);
 		PageFactory.initElements(driver,this);
 	}
 	
+	@FindBy(xpath="//div[contains(@aria-label,'Results')]//a[contains(@jsaction,'contextmenu:pane')]")
+	WebElement btn_firstResult;
+	
 	@FindBy(xpath="//button[@id='searchbox-searchbutton']")
 	WebElement btn_searchButton;
+	
 	@FindBy(xpath="//input[@id='searchboxinput']")
 	WebElement itxt_searchOnMap;
 	
@@ -57,10 +71,10 @@ public class GoogleMapPage {
 	@FindBy(xpath="//img[@aria-label='Walking']/parent::button")
 	WebElement btn_walkMode;
 	
-	@FindBy(xpath="//div[@id='section-directions-trip-0']//div[contains(@class,'delay-medium')]")
+	@FindBy(xpath="//div[@id='section-directions-trip-0']//div[contains(@class,'delay')]")
 	WebElement txt_firstOptTime;
 	
-	@FindBy(xpath="//div[@id='section-directions-trip-0']//div[contains(@class,'delay-medium')]/following-sibling::div")
+	@FindBy(xpath="//div[@id='section-directions-trip-0']//div[contains(@class,'delay')]//following-sibling::div")
 	WebElement txt_firstOptDistance;
 		
 	public String getHeadline() {
@@ -114,6 +128,12 @@ public class GoogleMapPage {
 	public void searchOnMap(String searchTerm) {
 		itxt_searchOnMap.sendKeys(searchTerm);
 		btn_searchButton.click();
+		// clicking on first option if there are multiple result
+		try {
+			btn_firstResult.click();
+		}catch(Exception e){
+			System.out.println("No context menu found");
+		}
 	}
 	
 	public void clickOnDirections() {
@@ -121,6 +141,7 @@ public class GoogleMapPage {
 	}
 	
 	public void setStartLocation(String startLocation) {
+		wait.until(ExpectedConditions.visibilityOf(itxt_fromLocation));
 		itxt_fromLocation.sendKeys(startLocation,Keys.ENTER);
 	}
 	
@@ -129,6 +150,7 @@ public class GoogleMapPage {
 	}
 	
 	public String getFirstOptionDistance() {
+		wait.until(ExpectedConditions.visibilityOf(txt_firstOptDistance));
 		String fdistance = "";
 		if(txt_firstOptDistance != null) {
 			fdistance = txt_firstOptDistance.getText();
@@ -137,6 +159,7 @@ public class GoogleMapPage {
 	}
 	
 	public String getFirstOptionTime() {
+		wait.until(ExpectedConditions.visibilityOf(txt_firstOptTime));
 		String fTime = "";
 		if(txt_firstOptTime != null) {
 			fTime =  txt_firstOptTime.getText();

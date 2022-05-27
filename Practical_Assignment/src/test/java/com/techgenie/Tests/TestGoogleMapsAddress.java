@@ -22,7 +22,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class TestGoogleMapsAddress {
 	WebDriver driver;
-	 Wait<WebDriver> wait;
 	GoogleMapPage gmaps;
 	ScreenShotUtil screenshot;
 	@BeforeTest
@@ -32,10 +31,6 @@ public class TestGoogleMapsAddress {
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
-		wait = new FluentWait<WebDriver>(driver)
-			        .withTimeout(Duration.ofSeconds(30))
-			        .pollingEvery(Duration.ofSeconds(5))
-			        .ignoring(NoSuchElementException.class);
 		gmaps = new GoogleMapPage(driver);
 		screenshot = new ScreenShotUtil(driver);
 		
