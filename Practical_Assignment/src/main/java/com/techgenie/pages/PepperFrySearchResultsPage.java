@@ -45,6 +45,8 @@ public class PepperFrySearchResultsPage {
 	@FindBy(xpath="//div[@id='webklipper-publisher-widget-container-notification-close-div']")
 	WebElement btn_closeNotification;
 	
+	@FindBy(xpath="//span[contains(text(),'No results found for')]")
+	WebElement noResults;
 //	div[@class="clipCard__wrapper"]//span[@class="clipCard__price-offer"]
 	
 	public void waitAndCloseNotification() {
@@ -57,20 +59,43 @@ public class PepperFrySearchResultsPage {
 	}
 	
 	public void selectLowToHigh() {
+		try {
+			if(noResults.isDisplayed()) {
+				return;
+			}
+		} catch (Exception e) {
+			System.out.println("Results found");
+		}
 		jse.executeScript("arguments[0].click()",rad_lowToHighPrice);
 	}
 	
 	public void selectHighToLow() {
-		jse.executeScript("arguments[0].click()",rad_lowToHighPrice);
+		try {
+			if(noResults.isDisplayed()) {
+				return;
+			}
+		} catch (Exception e) {
+			System.out.println("Results found");
+		}
+		jse.executeScript("arguments[0].click()",rad_highToLow);
 	}
 	
-	public int  getProductsPriceList() {
-		List<WebElement> l= (List<WebElement>) jse.executeScript("return document.querySelectorAll(\"span[class='clipCard__price-offer']\")");
-		
-		for(WebElement e: l) {
-			System.out.println(e.getText());
+	public int[]  getProductsPriceList() {
+		try {
+			if(noResults.isDisplayed()) {
+				return null;
+			}
+		} catch (Exception e) {
+			System.out.println("Results found");
 		}
-		return l.size();
+	wait.until(ExpectedConditions.javaScriptThrowsNoExceptions("document.readyState == 'complete'"));
+		List<WebElement> l= (List<WebElement>) jse.executeScript("return document.querySelectorAll(\"span[class='clipCard__price-offer']\")");
+		int pricelist[] = new int[l.size()];
+		for(int i =0;i<pricelist.length;i++) {
+			pricelist[i] = Integer.parseInt(l.get(i).getText().replaceAll("\\D", ""));
+//			System.out.println(pricelist[i]);
+		}
+		return pricelist;
 	}
 	
 	
