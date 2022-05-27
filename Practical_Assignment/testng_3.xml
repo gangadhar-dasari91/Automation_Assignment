@@ -13,4 +13,10 @@
       <class name="com.techgenie.Tests.TestPepperFry"/>
     </classes>
   </test>
+  <test thread-count="5" name="ie">
+  <parameter name="browser" value="ie"></parameter>
+    <classes>
+      <class name="com.techgenie.Tests.TestPepperFry"/>
+    </classes>
+  </test>
 </suite> <!-- Suite -->
