@@ -32,6 +32,7 @@ public class TestRedBus {
 				        .withTimeout(Duration.ofSeconds(30))
 				        .pollingEvery(Duration.ofSeconds(5))
 				        .ignoring(NoSuchElementException.class);
+			redbusHomePage = new RedBusHomePage(driver);
 			
 		}
 	
@@ -39,6 +40,11 @@ public class TestRedBus {
 	@Test
 	public void testRedBus() {
 		driver.get("https://www.redbus.in/");
+		redbusHomePage.enterSource("Mumbai");
+		redbusHomePage.enterDestination("Pune");
+		redbusHomePage.selectCurrentDate();
+		redbusHomePage.clickOnSearch();
+		
 	}
 
 	@AfterTest
