@@ -40,7 +40,7 @@ public class TestDataTables {
 		}
 	 
 	 @Test
-	 public void testDataTables() throws Exception {
+	 public void testDataTables() {
 //		 Test NO : 5
 //		 5.) Open https://datatables.net/ website.
 		 	driver.get("https://datatables.net");
@@ -84,10 +84,9 @@ public class TestDataTables {
 		 		}
 		 	}
 		 	
-		 	Thread.sleep(3000);
+		 	
 	 }
 	 
-	 @AfterMethod
 	@AfterTest
 		public void tearDown() {
 			driver.quit();
