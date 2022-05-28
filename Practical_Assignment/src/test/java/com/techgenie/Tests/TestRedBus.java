@@ -1,9 +1,12 @@
 package com.techgenie.Tests;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -53,8 +56,29 @@ public class TestRedBus {
 		redbusHomePage.selectCurrentDate();
 		redbusHomePage.clickOnSearch();
 		redbusSearchResult.scrollTillAllItemsLoaded();
-		
-		
+		System.out.println(redbusSearchResult.getBusDataItems().size());
+//		redbusSearchResult.getBusDataItems();
+		List<WebElement> busDataItems = redbusSearchResult.getBusDataItems();
+//		
+		for(WebElement e: busDataItems) {
+			String travels = e.findElement(By.cssSelector("div[class*='travels']")).getText();
+			String busType = e.findElement(By.cssSelector("div[class*='bus-type']")).getText();
+			String depTime = e.findElement(By.cssSelector("div[class*='dp-time']")).getText();
+			String depLoc = e.findElement(By.cssSelector("div[class*='dp-loc']")).getText();
+			String arrTime = e.findElement(By.cssSelector("div[class*='bp-time']")).getText();
+			String arrLoc = e.findElement(By.cssSelector("div[class*='bp-loc']")).getText();
+			String journeyDur = e.findElement(By.cssSelector("div[class*='dur']")).getText();
+			String fare =e.findElement(By.cssSelector("div[class*='seat-fare'] span")).getText();
+			String seatsLeft = (!e.findElements(By.cssSelector("div[class*='seat-left']")).isEmpty())? e.findElement(By.cssSelector("div[class*='seat-left']")).getText().replaceAll("\\D",""): "0";
+			String windowLeft =(!e.findElements(By.cssSelector("div[class*='window-left']")).isEmpty())? e.findElement(By.cssSelector("div[class*='window-left']")).getText().replaceAll("\\D",""): "0";
+			
+			
+			
+			
+			
+			System.out.println(travels+","+busType+","+depTime+","+depLoc+","+arrTime+","+arrLoc+","+journeyDur+","+fare+","+seatsLeft+","+windowLeft);
+			
+		}
 		Thread.sleep(5000);
 		
 	}
