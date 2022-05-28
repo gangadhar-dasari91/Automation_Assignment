@@ -38,12 +38,14 @@ public class TestRedBus {
 	
 	
 	@Test
-	public void testRedBus() {
+	public void testRedBus() throws Exception {
 		driver.get("https://www.redbus.in/");
 		redbusHomePage.enterSource("Mumbai");
 		redbusHomePage.enterDestination("Pune");
 		redbusHomePage.selectCurrentDate();
 		redbusHomePage.clickOnSearch();
+		
+		Thread.sleep(5000);
 		
 	}
 
