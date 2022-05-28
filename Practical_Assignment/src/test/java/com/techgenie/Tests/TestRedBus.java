@@ -134,8 +134,6 @@ public class TestRedBus {
 			e.printStackTrace();
 		}
 		
-		Thread.sleep(5000);
-		
 	}
 
 	@AfterMethod
